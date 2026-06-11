@@ -11,28 +11,32 @@
   <style>
     /* ── TOKENS ─────────────────────────────── */
     :root {
-      --bg:       #0b0b13;
-      --bg2:      #111120;
-      --bg3:      #17172b;
-      --acc:      #d4a853;
-      --acc-dim:  rgba(212,168,83,.14);
-      --acc-bdr:  rgba(212,168,83,.32);
-      --green:    #34d399;
-      --blue:     #63b3ed;
-      --text:     #e2e2ee;
-      --muted:    #7878a0;
-      --bdr:      rgba(255,255,255,.07);
-      --ff-d:     'Cormorant Garamond', Georgia, serif;
-      --ff-b:     'DM Sans', system-ui, sans-serif;
-      --max:      1140px;
-      --r:        10px;
-    }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body { background: var(--bg); color: var(--text); font-family: var(--ff-b); font-size: 16px; line-height: 1.65; overflow-x: hidden; }
-    a { color: var(--acc); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    img { display: block; max-width: 100%; }
+      :root {
+  --bg:       #0b0b13;
+  --bg2:      #111120;
+  --bg3:      #17172b;
+  --acc:      #d4a853;
+  --acc-dim:  rgba(212,168,83,.14);
+  --acc-bdr:  rgba(212,168,83,.32);
+  --green:    #34d399;
+  --blue:     #63b3ed;
+  --text:     #e2e2ee;
+  --muted:    #7878a0;
+  --bdr:      rgba(255,255,255,.07);
+  --ff-d:     'Cormorant Garamond', Georgia, serif;
+  --ff-b:     'DM Sans', system-ui, sans-serif;
+  --max:      1140px;
+  --r:        10px;
+
+  /* NEW: Subtle progressive section gradients */
+  --grad-expertise:   linear-gradient(180deg, #111120 0%, #0e0e1d 100%);
+  --grad-experience:  linear-gradient(180deg, #16162e 0%, #12122a 100%);
+  --grad-samples:     linear-gradient(180deg, #1a1a32 0%, #15152d 100%);
+  --grad-ai:          linear-gradient(180deg, #1e1e38 0%, #191934 100%);
+  --grad-testimonials:linear-gradient(180deg, #22223c 0%, #1c1c36 100%);
+  --grad-certs:       linear-gradient(180deg, #262640 0%, #20203a 100%);
+  --grad-contact:     linear-gradient(180deg, #2a2a48 0%, #242442 100%);
+}
 
     /* ── LAYOUT ─────────────────────────────── */
     .container { max-width: var(--max); margin: 0 auto; padding: 0 clamp(1.25rem, 4vw, 2.5rem); }
@@ -415,7 +419,51 @@
       .hamburger { display: block; }
       .form-2col { grid-template-columns: 1fr; }
     }
-  </style>
+ /* ============================================
+   SECTION BACKGROUND GRADIENTS
+   Creates elegant visual distinction between sections
+   ============================================ */
+
+#hero {
+  background: var(--bg);
+}
+
+#expertise {
+  background: var(--grad-expertise);
+}
+
+#experience {
+  background: var(--grad-experience);
+}
+
+#samples {
+  background: var(--grad-samples);
+}
+
+.ai-band {
+  background: var(--grad-ai);
+}
+
+#testimonials {
+  background: var(--grad-testimonials);
+}
+
+#certifications {
+  background: var(--grad-certs);
+}
+
+#contact {
+  background: var(--grad-contact);
+}
+
+footer {
+  background: var(--bg);
+}
+
+/* Subtle separation between sections */
+section:not(#hero) {
+  border-top: 1px solid rgba(255,255,255,0.05);
+} </style>
 </head>
 <body>
 
