@@ -1007,38 +1007,38 @@
     navAs.forEach(a => { a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--text)' : ''; });
   }, { passive: true });
 
-  /* ── Netlify Forms async submit ── */
-  const form    = document.getElementById('contact-form');
-  const success = document.getElementById('f-success');
+ /* ── Web3Forms async submit ── */
+const form    = document.getElementById('contact-form');
+const success = document.getElementById('f-success');
 
-  if (form) {
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const btn = form.querySelector('button[type=submit]');
-      btn.textContent = 'Sending…';
-      btn.disabled = true;
-      try {
-        const res = await fetch('/', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams(new FormData(form)).toString()
-        });
-        if (res.ok) {
-          success.classList.add('show');
-          form.reset();
-          setTimeout(() => success.classList.remove('show'), 6000);
-        } else {
-          alert('Something went wrong — please email directly at evansonmwangi381@gmail.com');
-        }
-      } catch (err) {
-        alert('Network error — please email directly at evansonmwangi381@gmail.com');
-      } finally {
-        btn.textContent = 'Send Message →';
-        btn.disabled = false;
+if (form) {
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = form.querySelector('button[type=submit]');
+    btn.textContent = 'Sending…';
+    btn.disabled = true;
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(Object.fromEntries(new FormData(form)))
+      });
+      const data = await res.json();
+      if (data.success) {
+        success.classList.add('show');
+        form.reset();
+        setTimeout(() => success.classList.remove('show'), 6000);
+      } else {
+        alert('Something went wrong — please email directly at evansonmwangi381@gmail.com');
       }
-    });
-  }
-</script>
-
-</body>
-</html>
+    } catch (err) {
+      alert('Network error — please email directly at evansonmwangi381@gmail.com');
+    } finally {
+      btn.textContent = 'Send Message →';
+      btn.disabled = false;
+    }
+  });
+}
