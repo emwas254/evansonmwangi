@@ -415,7 +415,53 @@
       .hamburger { display: block; }
       .form-2col { grid-template-columns: 1fr; }
     }
-  </style>
+  /*
+ ═══════════════════════════════════════════════════════
+  SECTION BACKGROUND PATCH — emwas254 portfolio
+ ───────────────────────────────────────────────────────
+  INSTRUCTIONS:
+  Paste everything below this comment block at the very
+  END of your <style> tag, just before </style>.
+  Do NOT change anything else. Source order guarantees
+  these rules win over existing declarations.
+ ═══════════════════════════════════════════════════════
+*/
+
+/* New token: alternate section tint
+   — sits between --bg (#0b0b13) and --bg2 (#111120)
+   — cards at --bg2 still float visibly above it        */
+:root { --bg-alt: #0d0d1e; }
+
+/* ── Alternating section backgrounds ─────────────── */
+/* Dark  : hero, experience, testimonials, contact    */
+/* Lifted: expertise, samples, certifications         */
+/* Accent: ai-band (most lifted — acts as CTA break)  */
+
+#hero           { background: var(--bg); }
+
+#expertise      { background: var(--bg-alt);
+                  border-top: 1px solid var(--bdr); }
+
+#experience     { background: var(--bg);
+                  border-top: 1px solid var(--bdr); }
+
+#samples        { background: var(--bg-alt);
+                  border-top: 1px solid var(--bdr); }
+
+.ai-band        { background: var(--bg3);
+                  border-top:    1px solid rgba(212,168,83,.2);
+                  border-bottom: 1px solid rgba(212,168,83,.2); }
+
+#testimonials   { background: var(--bg);
+                  border-top: 1px solid var(--bdr); }
+
+#certifications { background: var(--bg-alt);
+                  border-top: 1px solid var(--bdr); }
+
+#contact        { background: var(--bg);
+                  border-top: 1px solid var(--bdr); }
+
+footer          { background: var(--bg); }</style>
 </head>
 <body>
 
