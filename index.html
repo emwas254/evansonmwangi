@@ -404,8 +404,122 @@
     .foot-links a:hover { color: var(--text); text-decoration: none; }
 
     /* ── ANIMATIONS ─────────────────────────── */
-    .fi-anim { opacity: 0; transform: translateY(18px); transition: opacity .55s ease, transform .55s ease; }
+    .fi-anim { opacity: 0; transform: translateY(22px); transition: opacity .65s cubic-bezier(.22,1,.36,1), transform .65s cubic-bezier(.22,1,.36,1); }
     .fi-anim.in { opacity: 1; transform: none; }
+
+    /* Staggered children */
+    .fi-anim.in > *:nth-child(1) { transition-delay:.05s }
+    .fi-anim.in > *:nth-child(2) { transition-delay:.1s }
+    .fi-anim.in > *:nth-child(3) { transition-delay:.15s }
+
+    /* Particle canvas */
+    #particle-canvas {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      opacity: .55;
+    }
+
+    /* Hero counter animation */
+    .stat-n { transition: color .3s; }
+    .stat-n.counting { color: var(--acc); }
+
+    /* Animated gradient underline on hero h1 */
+    .hero-h1 em {
+      background: linear-gradient(90deg, #d4a853, #e5bc6a, #b8892f, #d4a853);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 3s linear infinite;
+    }
+    @keyframes shimmer { to { background-position: 200% center; } }
+
+    /* Typing cursor on hero pre */
+    .hero-pre::after {
+      content: '|'; color: var(--acc); animation: blink .8s step-end infinite; margin-left: 2px;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    /* Reveal with slide + fade stagger */
+    .stagger-reveal { opacity: 0; transform: translateY(24px); }
+    .stagger-reveal.show { animation: slideUp .6s cubic-bezier(.22,1,.36,1) forwards; }
+    @keyframes slideUp { to { opacity:1; transform:none; } }
+
+    /* Card hover glow */
+    .card {
+      transition: border-color .35s, transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s;
+    }
+    .card:hover {
+      border-color: var(--acc-bdr);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(212,168,83,.1);
+    }
+
+    /* Timeline dot pulse on hover */
+    .tl-item::after { transition: transform .3s, background .3s; }
+    .tl-item:hover::after { transform: scale(1.5); background: #e5bc6a; }
+
+    /* Progress bar animation */
+    .qa-bar { width: 0 !important; transition: width 1.2s cubic-bezier(.22,1,.36,1); }
+    .qa-bar.run { width: var(--w) !important; }
+
+    /* Cert card hover */
+    .cert {
+      transition: border-color .3s, transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s;
+    }
+    .cert:hover {
+      border-color: var(--acc-bdr);
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 12px 32px rgba(212,168,83,.09);
+    }
+
+    /* Testimonial card hover */
+    .tm-card {
+      transition: border-color .3s, transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s;
+    }
+    .tm-card:hover {
+      border-color: var(--acc-bdr);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(212,168,83,.08);
+    }
+
+    /* Nav scroll indicator */
+    #nav-progress {
+      position: fixed; top: 60px; left: 0; height: 2px; z-index: 101;
+      background: linear-gradient(90deg, var(--acc), #e5bc6a);
+      width: 0%; transition: width .1s linear;
+    }
+
+    /* Contact method ripple */
+    .c-method { position: relative; overflow: hidden; }
+    .c-method::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at center, rgba(212,168,83,.15) 0%, transparent 70%);
+      opacity: 0; transition: opacity .3s;
+    }
+    .c-method:hover::after { opacity: 1; }
+
+    /* Button shine effect */
+    .btn-primary { position: relative; overflow: hidden; }
+    .btn-primary::after {
+      content: ''; position: absolute;
+      top: -50%; left: -75%; width: 50%; height: 200%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
+      transform: skewX(-20deg);
+      transition: left .5s;
+    }
+    .btn-primary:hover::after { left: 150%; }
+
+    /* Section divider line */
+    section { border-bottom: 1px solid var(--bdr); }
+    section:last-of-type { border-bottom: none; }
+
+    /* AI band enhanced */
+    .ai-inner {
+      transition: box-shadow .4s;
+    }
+    .ai-inner:hover {
+      box-shadow: 0 0 60px rgba(212,168,83,.07);
+    }
 
     /* ── RESPONSIVE ─────────────────────────── */
     @media (max-width: 860px) { .contact-wrap { grid-template-columns: 1fr; } }
@@ -418,6 +532,9 @@
   </style>
 </head>
 <body>
+
+<canvas id="particle-canvas"></canvas>
+<div id="nav-progress"></div>
 
 <!-- ═══════════════════ NAV ═══════════════════ -->
 <nav>
@@ -715,10 +832,10 @@
           <span class="pill pill-acc">Quality Standard</span>
         </div>
         <div class="s-card-body">
-          <div class="qa-row"><span class="qa-l">Resolution Accuracy</span><div class="qa-bar-bg"><div class="qa-bar" style="width:30%"></div></div><span class="qa-pct">30%</span></div>
-          <div class="qa-row"><span class="qa-l">Tone Appropriateness</span><div class="qa-bar-bg"><div class="qa-bar" style="width:25%"></div></div><span class="qa-pct">25%</span></div>
-          <div class="qa-row"><span class="qa-l">Documentation Completeness</span><div class="qa-bar-bg"><div class="qa-bar" style="width:25%"></div></div><span class="qa-pct">25%</span></div>
-          <div class="qa-row"><span class="qa-l">Follow-up & SLA Compliance</span><div class="qa-bar-bg"><div class="qa-bar" style="width:20%"></div></div><span class="qa-pct">20%</span></div>
+          <div class="qa-row"><span class="qa-l">Resolution Accuracy</span><div class="qa-bar-bg"><div class="qa-bar" style="--w:30%;width:0"></div></div><span class="qa-pct">30%</span></div>
+          <div class="qa-row"><span class="qa-l">Tone Appropriateness</span><div class="qa-bar-bg"><div class="qa-bar" style="--w:25%;width:0"></div></div><span class="qa-pct">25%</span></div>
+          <div class="qa-row"><span class="qa-l">Documentation Completeness</span><div class="qa-bar-bg"><div class="qa-bar" style="--w:25%;width:0"></div></div><span class="qa-pct">25%</span></div>
+          <div class="qa-row"><span class="qa-l">Follow-up & SLA Compliance</span><div class="qa-bar-bg"><div class="qa-bar" style="--w:20%;width:0"></div></div><span class="qa-pct">20%</span></div>
           <div class="qa-note"><strong>Adjudication Trigger:</strong> Score variance ≥2 between reviewers → escalate to senior reviewer</div>
         </div>
       </div>
@@ -986,28 +1103,201 @@
 
 
 <script>
-  /* ── Hamburger ─────────────────── */
+  /* ═══════════════════════════════════════════════════
+     PARTICLE BACKGROUND
+  ═══════════════════════════════════════════════════ */
+  (function(){
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let W, H, particles = [];
+
+    function resize() {
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function Particle() {
+      this.x = Math.random() * W;
+      this.y = Math.random() * H;
+      this.r = Math.random() * 1.4 + 0.4;
+      this.vx = (Math.random() - .5) * .3;
+      this.vy = (Math.random() - .5) * .3;
+      this.alpha = Math.random() * 0.5 + 0.1;
+    }
+
+    for (let i = 0; i < 90; i++) particles.push(new Particle());
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      particles.forEach(p => {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > W) p.vx *= -1;
+        if (p.y < 0 || p.y > H) p.vy *= -1;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(212,168,83,${p.alpha})`;
+        ctx.fill();
+      });
+
+      // Draw subtle connecting lines between nearby particles
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          if (dist < 110) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(212,168,83,${0.06 * (1 - dist/110)})`;
+            ctx.lineWidth = 0.6;
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+
+  /* ═══════════════════════════════════════════════════
+     NAV SCROLL PROGRESS BAR
+  ═══════════════════════════════════════════════════ */
+  const progressBar = document.getElementById('nav-progress');
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+    progressBar.style.width = (scrolled * 100) + '%';
+  }, { passive: true });
+
+  /* ═══════════════════════════════════════════════════
+     HAMBURGER MENU
+  ═══════════════════════════════════════════════════ */
   const ham = document.getElementById('hamburger');
   const nl  = document.getElementById('nav-list');
   ham.addEventListener('click', () => nl.classList.toggle('open'));
   nl.querySelectorAll('a').forEach(a => a.addEventListener('click', () => nl.classList.remove('open')));
 
-  /* ── Scroll fade-in ────────────── */
+  /* ═══════════════════════════════════════════════════
+     SCROLL FADE-IN OBSERVER
+  ═══════════════════════════════════════════════════ */
   const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-  }, { threshold: 0.08 });
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('in'), i * 60);
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.07 });
   document.querySelectorAll('.fi-anim').forEach(el => io.observe(el));
 
-  /* ── Active nav on scroll ──────── */
-  const secs = document.querySelectorAll('section[id]');
+  /* ═══════════════════════════════════════════════════
+     ACTIVE NAV HIGHLIGHT ON SCROLL
+  ═══════════════════════════════════════════════════ */
+  const secs  = document.querySelectorAll('section[id]');
   const navAs = document.querySelectorAll('.nav-list a[href^="#"]');
   window.addEventListener('scroll', () => {
     let cur = '';
-    secs.forEach(s => { if (window.scrollY >= s.offsetTop - 80) cur = s.id; });
-    navAs.forEach(a => { a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--text)' : ''; });
+    secs.forEach(s => { if (window.scrollY >= s.offsetTop - 90) cur = s.id; });
+    navAs.forEach(a => {
+      const active = a.getAttribute('href') === '#' + cur;
+      a.style.color = active ? 'var(--text)' : '';
+      a.style.fontWeight = active ? '500' : '';
+    });
   }, { passive: true });
 
-  /* ── Netlify Forms async submit ── */
+  /* ═══════════════════════════════════════════════════
+     COUNTER ANIMATION FOR HERO STATS
+  ═══════════════════════════════════════════════════ */
+  function animateCounter(el, target, suffix, duration) {
+    let start = 0;
+    const step = duration / 60;
+    const inc  = target / (duration / (1000 / 60));
+    el.classList.add('counting');
+    const timer = setInterval(() => {
+      start += inc;
+      if (start >= target) {
+        start = target;
+        clearInterval(timer);
+        el.classList.remove('counting');
+      }
+      el.innerHTML = Math.floor(start).toLocaleString() + '<span>' + suffix + '</span>';
+    }, step);
+  }
+
+  const statObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const statNs = document.querySelectorAll('.stat-n');
+        // 25,000+ interactions
+        if (statNs[0]) animateCounter(statNs[0], 25000, '+', 1400);
+        // 5+ years
+        if (statNs[1]) animateCounter(statNs[1], 5, '+', 900);
+        // 5 industries
+        if (statNs[2]) animateCounter(statNs[2], 5, '', 700);
+        // #2 global
+        if (statNs[3]) { statNs[3].innerHTML = '#<span>2</span>'; }
+        statObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+  const heroStats = document.querySelector('.hero-stats');
+  if (heroStats) statObserver.observe(heroStats);
+
+  /* ═══════════════════════════════════════════════════
+     QA BAR ANIMATED WIDTHS
+  ═══════════════════════════════════════════════════ */
+  const barObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.querySelectorAll('.qa-bar').forEach(bar => {
+          setTimeout(() => bar.classList.add('run'), 200);
+        });
+        barObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  document.querySelectorAll('.s-card').forEach(card => {
+    if (card.querySelector('.qa-bar')) barObserver.observe(card);
+  });
+
+  /* ═══════════════════════════════════════════════════
+     TYPING EFFECT FOR HERO PRE
+  ═══════════════════════════════════════════════════ */
+  const heroPre = document.querySelector('.hero-pre');
+  if (heroPre) {
+    const fullText = heroPre.textContent.trim();
+    heroPre.textContent = '';
+    let i = 0;
+    setTimeout(() => {
+      const typer = setInterval(() => {
+        heroPre.textContent = fullText.slice(0, i++);
+        if (i > fullText.length) clearInterval(typer);
+      }, 45);
+    }, 400);
+  }
+
+  /* ═══════════════════════════════════════════════════
+     CARD STAGGER ON SCROLL
+  ═══════════════════════════════════════════════════ */
+  const cardStagger = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const cards = e.target.querySelectorAll('.card, .cert, .tm-card, .s-card');
+        cards.forEach((c, i) => {
+          c.classList.add('stagger-reveal');
+          setTimeout(() => c.classList.add('show'), i * 90);
+        });
+        cardStagger.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.05 });
+  document.querySelectorAll('.cards-3, .certs-grid, .tm-grid, .samples-wrap').forEach(g => cardStagger.observe(g));
+
+  /* ═══════════════════════════════════════════════════
+     NETLIFY FORMS ASYNC SUBMIT
+  ═══════════════════════════════════════════════════ */
   const form    = document.getElementById('contact-form');
   const success = document.getElementById('f-success');
 
