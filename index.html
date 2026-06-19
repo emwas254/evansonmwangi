@@ -1210,8 +1210,9 @@
   /* ═══════════════════════════════════════════════════
      COUNTER ANIMATION FOR HERO STATS
   ═══════════════════════════════════════════════════ */
-  function animateCounter(el, target, suffix, duration) {
+  function animateCounter(el, target, suffix, duration, prefix) {
     let start = 0;
+    const pre  = prefix || '';
     const step = duration / 60;
     const inc  = target / (duration / (1000 / 60));
     el.classList.add('counting');
@@ -1222,7 +1223,7 @@
         clearInterval(timer);
         el.classList.remove('counting');
       }
-      el.innerHTML = Math.floor(start).toLocaleString() + '<span>' + suffix + '</span>';
+      el.innerHTML = pre + Math.floor(start).toLocaleString() + '<span>' + suffix + '</span>';
     }, step);
   }
 
@@ -1230,12 +1231,12 @@
     entries.forEach(e => {
       if (e.isIntersecting) {
         const statNs = document.querySelectorAll('.stat-n');
-        // 25,000+ interactions
-        if (statNs[0]) animateCounter(statNs[0], 25000, '+', 1400);
         // 5+ years
-        if (statNs[1]) animateCounter(statNs[1], 5, '+', 900);
-        // 5 industries
-        if (statNs[2]) animateCounter(statNs[2], 5, '', 700);
+        if (statNs[0]) animateCounter(statNs[0], 5, '+', 900);
+        // 25,000+ interactions
+        if (statNs[1]) animateCounter(statNs[1], 25000, '+', 1400);
+        // ~30% handling time reduced
+        if (statNs[2]) animateCounter(statNs[2], 30, '%', 700, '~');
         // #2 global
         if (statNs[3]) { statNs[3].innerHTML = '#<span>2</span>'; }
         statObserver.disconnect();
